@@ -15,3 +15,6 @@ Eksam on Jaagupiga. Peate tulema koodilõiguga suveprojektist (vabalt valitud ke
 Hinne kujuneb kontrolltööde põhjal.
 
 Kõik eelnevad kodutööd peavad olema esitatud kontrolltöö ajaks.
+
+Uue projekti tegemiseks: 
+https://start.spring.io/#!type=maven-project&language=java&platformVersion=4.0.2&packaging=jar&configurationFileFormat=properties&jvmVersion=21&groupId=ee.SINU_NIMI&artifactId=PROJEKTI_NIMI&name=PROJEKTI_NIMI&description=Kirjeldus&packageName=ee.SINU_NIMI.PROJEKTI_NIMI&dependencies=lombok,web,data-jpa,h2,postgresql
