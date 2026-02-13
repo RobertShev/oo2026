@@ -21,4 +21,5 @@ public class Movie {
     private String name;
     private String description;
     private Double rating;
+    private Integer year;
 }
