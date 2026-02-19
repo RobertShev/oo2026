@@ -17,7 +17,17 @@ public class Product {
     private Long id;
     private String name;
     private String description;
-    private Double price;
-    private Boolean active;
-    private Integer stock;
+    private double price;
+    private boolean active;
+    private int stock;
+    // Panen andmebaasi, aga ei määra seda väärtust:
+    // double -> 0
+    // boolean -> false
+    // int -> 0
+
+    // Panen andmebaasi, aga ei määra seda väärtust:
+    // Double -> null
+    // Boolean -> null
+    // Integer -> null
+
 }
