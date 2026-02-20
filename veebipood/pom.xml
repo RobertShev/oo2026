@@ -88,11 +88,10 @@
         </dependency>
         <dependency>
             <groupId>com.github.vladislavgoltjajev</groupId>
-            <artifactId>java-isikukood</artifactId>
-            <version>2.1</version>
+            <artifactId>java-personal-code</artifactId>
+            <version>1.6</version>
             <scope>compile</scope>
         </dependency>
-
 	</dependencies>
 
 	<build>
