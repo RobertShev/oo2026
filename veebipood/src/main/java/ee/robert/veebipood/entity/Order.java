@@ -1,4 +1,7 @@
 package ee.robert.veebipood.entity;
+
+import ee.robert.veebipood.entity.OrderRow;
+import ee.robert.veebipood.entity.Person;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,10 +17,19 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "orders")
-public class Order {
+public class Order { // ERROR: syntax error at or near "order"
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date create;
-    private int total;
+    private Date created;
+    private double total;
+    private String parcelMachine;
+
+    @ManyToOne
+    private Person person;
+
+    // @ManyToMany
+    // @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<OrderRow> orderRows;
 }

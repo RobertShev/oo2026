@@ -1,15 +1,14 @@
-package ee.mihkel.veebipood.service;
+package ee.robert.veebipood.service;
 
-import ee.mihkel.veebipood.dto.OrderRowDto;
-import ee.mihkel.veebipood.entity.Order;
-import ee.mihkel.veebipood.entity.OrderRow;
-import ee.mihkel.veebipood.entity.Person;
-import ee.mihkel.veebipood.entity.Product;
-import ee.mihkel.veebipood.repository.OrderRepository;
-import ee.mihkel.veebipood.repository.PersonRepository;
-import ee.mihkel.veebipood.repository.ProductRepository;
+import ee.robert.veebipood.dto.OrderRowDto;
+import ee.robert.veebipood.entity.Order;
+import ee.robert.veebipood.entity.OrderRow;
+import ee.robert.veebipood.entity.Person;
+import ee.robert.veebipood.entity.Product;
+import ee.robert.veebipood.repository.OrderRepository;
+import ee.robert.veebipood.repository.PersonRepository;
+import ee.robert.veebipood.repository.ProductRepository;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

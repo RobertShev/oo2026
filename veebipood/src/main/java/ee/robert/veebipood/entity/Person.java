@@ -1,5 +1,7 @@
 package ee.robert.veebipood.entity;
 
+//import javax.persistence.*
+import ee.robert.veebipood.entity.Address;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,4 +24,14 @@ public class Person { // User on hõivatud PostgreSQL tasandil
     private String password;
     @Column(unique = true)
     private String personalCode;
+
+    // {CascadeType.DETACH, CascadeType.REMOVE, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}
+    // CascadeType --> CascadeType.REMOVE   kui kustutatakse Person, siis kustutatakse ka Address
+    // CascadeType.PERSIST    kui lisatakse Person ja temaga antakse kaasa Address mida pole andmebaasis
+    //                         siis ta lisatakse andmebaasi kui uus kirje Address tabelisse
+    // Cascade.MERGE         kui muudetakse Personit ja Person küljes olevat Addressi siis
+    //                          muutub nii Personi sisu kui ka Addressi sisu
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Address address;
 }
