@@ -3,3 +3,5 @@ Loo uus rakendus.
 Tee andmemudel filmi jaoks.
 
 Võimalda filme näha (GET), kustutada (DELETE), lisada (POST).
+
+Järgmine loeng 10.15 algusega peaks ekraani jagama ja suuliselt rääkima, kuidas tehti.

@@ -1,4 +1,4 @@
-package com.robert.filmipood.entity;
+package ee.mihkel.veebipood.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,12 +14,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Movie {
+public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String description;
-    private Double rating;
-    private Integer year;
+    private String street;
+    private String number;
+    private String city;
+    private String country;
+    private String zipcode;
 }

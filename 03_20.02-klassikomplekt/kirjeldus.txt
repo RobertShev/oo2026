@@ -6,4 +6,8 @@ Anna sobivad veateated.
 
 Võimalda lisada igale sportlasele tulemus (kui lisad tulemuse,siis koos sportlasega).
 
+Kui lisad tulemuse, siis peab olema 1) Spordiala (100m / kaugushüpe) 2) Tulemus (12.5 / 8.0)
+
+Back-end arvutab ise punktisumma.
+
 Eraldi API endpoint peab tagastama sportlase kõigi juba lisatud tulemuste kogusummat.
