@@ -79,14 +79,24 @@ public class RentalController {
         for (FilmRentalDto filmRentalDto : filmRentalDtos) {
             Film dbFilm = filmRepository.findById(filmRentalDto.filmId()).orElseThrow();
             Rental rental = dbFilm.getRental();
-            // switch case --> filmi_summa arvutamine + summale juurde liitmine
-            rental.setLateFee(rental.getLateFee() + sum); // <-- võib olla switchi sees
+
+            int extraDays = filmRentalDto.days() - dbFilm.getDays();
+            if (extraDays > 0) {
+                double lateFeeForFilm = 0;
+                switch (dbFilm.getType()) {
+                    case NEW -> lateFeeForFilm = premiumPrice * extraDays;
+                    case REGULAR, OLD -> lateFeeForFilm = basicPrice * extraDays;
+                }
+                sum += lateFeeForFilm;
+                rental.setLateFee(rental.getLateFee() + lateFeeForFilm);
+            }
+
             rentalRepository.save(rental);
 
             dbFilm.setRental(null);
             dbFilm.setDays(0);
             filmRepository.save(dbFilm);
         }
-        return sum; // maksmisele lähev summa (võib tulla erinevatest rentalitest)
+        return sum;
     }
 }
