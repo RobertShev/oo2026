@@ -44,19 +44,19 @@ public class CarController {
 
     private void validateCar(CarDTO carDTO) {
         if (carDTO.getMake() == null || carDTO.getMake().isBlank()) {
-            throw new IllegalArgumentException("Car make is required.");
+            throw new IllegalArgumentException("VEATEADE_MARK_PUUDU");
         }
         if (carDTO.getModel() == null || carDTO.getModel().isBlank()) {
-            throw new IllegalArgumentException("Car model is required.");
+            throw new IllegalArgumentException("VEATEADE_MUDEL_PUUDU");
         }
         if (carDTO.getYear() == null || carDTO.getYear() < 1886) {
-            throw new IllegalArgumentException("Invalid car year. Cars must be from 1886 onwards.");
+            throw new IllegalArgumentException("VEATEADE_AASTA_VALE");
         }
         if (carDTO.getPower() != null && carDTO.getPower() <= 0) {
-            throw new IllegalArgumentException("Car power must be a positive number.");
+            throw new IllegalArgumentException("VEATEADE_VÕIMSUS_VALE");
         }
         if (carDTO.getMileage() != null && carDTO.getMileage() < 0) {
-            throw new IllegalArgumentException("Car mileage cannot be negative.");
+            throw new IllegalArgumentException("VEATEADE_LÄBISÕIT_VALE");
         }
     }
 }
