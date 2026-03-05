@@ -51,6 +51,7 @@ public class DecathlonService {
         return resultDTO;
     }
 
+    @org.springframework.transaction.annotation.Transactional
     public Integer getTotalScore(Long athleteId) {
         Athlete athlete = athleteRepository.findById(athleteId)
                 .orElseThrow(() -> new ResourceNotFoundException("Athlete not found with ID: " + athleteId));
