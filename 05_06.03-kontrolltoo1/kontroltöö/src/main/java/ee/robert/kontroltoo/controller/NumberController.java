@@ -44,11 +44,15 @@ public class NumberController {
         List<String> convertedResults = numberService.convertNumbers(numbers, format);
         ConversionFormat conversionFormat = ConversionFormat.fromString(format);
 
+        List<ConvertedNumberEntity> entitiesToSave = new ArrayList<>();
+
         for (int i = 0; i < numbers.size(); i++) {
             NumberEntity entity = numbers.get(i);
             String convertedValue = convertedResults.get(i);
-            convertedNumberRepository.save(new ConvertedNumberEntity(entity.getValue(), convertedValue, conversionFormat.name()));
+            entitiesToSave.add(new ConvertedNumberEntity(entity.getValue(), convertedValue, conversionFormat.name()));
         }
+
+        convertedNumberRepository.saveAll(entitiesToSave);
 
         return convertedResults;
     }
