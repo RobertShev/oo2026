@@ -1,7 +1,9 @@
 package ee.robert.kontroltoo.controller;
 
+import ee.robert.kontroltoo.dto.NumberDto;
 import ee.robert.kontroltoo.entity.NumberEntity;
 import ee.robert.kontroltoo.repository.NumberRepository;
+import ee.robert.kontroltoo.service.NumberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +14,9 @@ import java.util.List;
 public class NumberController {
 
     @Autowired
+    private NumberService numberService;
+
+    @Autowired
     private NumberRepository numberRepository;
 
     @GetMapping
@@ -19,16 +24,16 @@ public class NumberController {
         return numberRepository.findAll();
     }
 
-    @PostMapping("/{value}")
-    public String addNumber(@PathVariable int value) {
-        if (value < 0) {
-            throw new RuntimeException("Viga: Arv ei tohi olla negatiivne!");
-        }
-        if (value > 1000000) {
-            throw new RuntimeException("Viga: Arv on liiga suur (maksimaalselt 1 000 000)!");
-        }
-        
-        numberRepository.save(new NumberEntity(value));
-        return "Arv " + value + " on lisatud andmebaasi.";
+    @PostMapping
+    public String addNumber(@RequestBody NumberDto numberDto) {
+        numberService.validateNumber(numberDto);
+        numberRepository.save(new NumberEntity(numberDto.getValue()));
+        return "Arv " + numberDto.getValue() + " on lisatud andmebaasi.";
+    }
+
+    @GetMapping("/convert")
+    public List<String> convertNumbers(@RequestParam String format) {
+        List<NumberEntity> numbers = numberRepository.findAll();
+        return numberService.convertNumbers(numbers, format);
     }
 }
