@@ -24,8 +24,8 @@ public class NumberService {
     public List<String> convertNumbers(List<NumberEntity> numbers, String format) {
         ConversionFormat conversionFormat = ConversionFormat.fromString(format);
 
-        return numbers.stream().map(n -> {
-            int val = n.getValue();
+        return numbers.stream().map(numberEntity -> {
+            int val = numberEntity.getValue();
             return switch (conversionFormat) {
                 case BINARY -> Integer.toBinaryString(val);
                 case OCTAL -> Integer.toOctalString(val);
