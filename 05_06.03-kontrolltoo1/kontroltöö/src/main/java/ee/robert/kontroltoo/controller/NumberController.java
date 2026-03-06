@@ -25,10 +25,10 @@ public class NumberController {
     }
 
     @PostMapping
-    public String addNumber(@RequestBody NumberDto numberDto) {
+    public NumberEntity addNumber(@RequestBody NumberDto numberDto) {
         numberService.validateNumber(numberDto);
-        numberRepository.save(new NumberEntity(numberDto.getValue()));
-        return "Arv " + numberDto.getValue() + " on lisatud andmebaasi.";
+        NumberEntity savedEntity = numberRepository.save(new NumberEntity(numberDto.getValue()));
+        return savedEntity;
     }
 
     @GetMapping("/convert")
