@@ -1,165 +1,56 @@
-import { useEffect, useState } from 'react';
-import { AthleteDTO } from './types';
-import { athleteService, resultService } from './services/api';
+import { useDecathlon } from './context/DecathlonContext';
+import { AthletesList } from './components/AthletesList';
+import { AddResultForm } from './components/AddResultForm';
 
 function App() {
-  const [athletes, setAthletes] = useState<AthleteDTO[]>([]);
-  const [newAthleteName, setNewAthleteName] = useState('');
-  const [selectedAthleteId, setSelectedAthleteId] = useState<number | null>(null);
-  const [discipline, setDiscipline] = useState('');
-  const [resultValue, setResultValue] = useState<number>(0);
-  const [totalScore, setTotalScore] = useState<number | null>(null);
-
-  useEffect(() => {
-    const loadAthletes = async () => {
-      try {
-        const response = await athleteService.getAll();
-        setAthletes(response.data);
-      } catch (error) {
-        console.error('Error fetching athletes:', error);
-      }
-    };
-    loadAthletes();
-  }, []);
-
-  const fetchAthletes = async () => {
-    try {
-      const response = await athleteService.getAll();
-      setAthletes(response.data);
-    } catch (error) {
-      console.error('Error fetching athletes:', error);
-    }
-  };
-
-  const handleAddAthlete = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newAthleteName) return;
-    try {
-      await athleteService.create({ name: newAthleteName });
-      setNewAthleteName('');
-      fetchAthletes();
-    } catch (error) {
-      console.error('Error adding athlete:', error);
-    }
-  };
-
-  const handleAddResult = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (selectedAthleteId === null || !discipline || resultValue <= 0) return;
-    try {
-      await resultService.create({
-        athleteId: selectedAthleteId,
-        discipline,
-        resultValue,
-      });
-      setDiscipline('');
-      setResultValue(0);
-      handleGetTotalScore(selectedAthleteId);
-    } catch (error) {
-      console.error('Error adding result:', error);
-    }
-  };
-
-  const handleGetTotalScore = async (id: number) => {
-    try {
-      const response = await athleteService.getTotalScore(id);
-      setTotalScore(response.data);
-      setSelectedAthleteId(id);
-    } catch (error) {
-      console.error('Error getting total score:', error);
-    }
-  };
+  const { athletes, selectedAthlete, totalScore, addAthlete, addResult, selectAthlete, isLoading, error, clearError } = useDecathlon();
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <h1 className="text-4xl font-bold text-center mb-8">Decathlon Management</h1>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Athletes List */}
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-2xl font-semibold mb-4">Athletes</h2>
-          <form onSubmit={handleAddAthlete} className="mb-6 flex gap-2">
-            <input
-              type="text"
-              placeholder="Athlete Name"
-              value={newAthleteName}
-              onChange={(e) => setNewAthleteName(e.target.value)}
-              className="flex-1 border p-2 rounded"
-            />
-            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-              Add
-            </button>
-          </form>
-
-          <ul className="space-y-2">
-            {athletes.map((athlete) => (
-              <li
-                key={athlete.id}
-                className={`p-3 border rounded cursor-pointer flex justify-between items-center ${
-                  selectedAthleteId === athlete.id ? 'bg-blue-50 border-blue-500' : 'hover:bg-gray-50'
-                }`}
-                onClick={() => {
-                  if (athlete.id !== undefined) {
-                    handleGetTotalScore(athlete.id);
-                  }
-                }}
-              >
-                <span>{athlete.name}</span>
-                {selectedAthleteId === athlete.id && totalScore !== null && (
-                  <span className="font-bold text-blue-600">Total Score: {totalScore}</span>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Add Result Form */}
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-2xl font-semibold mb-4">Add Result</h2>
-          <form onSubmit={handleAddResult} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Select Athlete</label>
-              <select
-                value={selectedAthleteId || ''}
-                onChange={(e) => setSelectedAthleteId(Number(e.target.value))}
-                className="mt-1 block w-full border p-2 rounded"
-              >
-                <option value="">Choose an athlete</option>
-                {athletes.map((athlete) => (
-                  <option key={athlete.id} value={athlete.id}>
-                    {athlete.name}
-                  </option>
-                ))}
-              </select>
+    <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-blue-100 p-4 md:p-8">
+      <div className="max-w-5xl mx-auto">
+        <header className="mb-10 text-center">
+          <h1 className="text-3xl md:text-4xl font-light tracking-tight text-gray-800">Decathlon Management</h1>
+          <div className="flex flex-col items-center gap-3 mt-2">
+            <p className="text-sm text-gray-500">Track athletes and their event results seamlessly.</p>
+            <div className="bg-white px-4 py-1.5 rounded-full border border-gray-100 shadow-sm flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+              <span className="text-sm font-medium text-gray-700">
+                {athletes.length} {athletes.length === 1 ? 'Athlete' : 'Athletes'}
+              </span>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Discipline</label>
-              <input
-                type="text"
-                placeholder="e.g. 100m, Long Jump"
-                value={discipline}
-                onChange={(e) => setDiscipline(e.target.value)}
-                className="mt-1 block w-full border p-2 rounded"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Result Value</label>
-              <input
-                type="number"
-                step="0.01"
-                value={resultValue}
-                onChange={(e) => setResultValue(Number(e.target.value))}
-                className="mt-1 block w-full border p-2 rounded"
-              />
-            </div>
+          </div>
+        </header>
+
+        {error && (
+          <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 flex justify-between items-center transition-all duration-300 shadow-sm">
+            <span className="text-sm font-medium">{error}</span>
             <button
-              type="submit"
-              disabled={selectedAthleteId === null}
-              className="w-full bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:bg-gray-300"
+              onClick={clearError}
+              className="text-red-400 hover:text-red-600 transition-colors p-1 rounded-md hover:bg-red-100"
+              aria-label="Dismiss error"
             >
-              Add Result
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
             </button>
-          </form>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+          <AthletesList
+            athletes={athletes}
+            selectedAthlete={selectedAthlete}
+            isLoading={isLoading}
+            onAddAthlete={addAthlete}
+            onSelectAthlete={selectAthlete}
+          />
+          <AddResultForm
+            selectedAthlete={selectedAthlete}
+            totalScore={totalScore}
+            isLoading={isLoading}
+            onAddResult={addResult}
+            onDeselect={() => selectAthlete(null)}
+          />
         </div>
       </div>
     </div>

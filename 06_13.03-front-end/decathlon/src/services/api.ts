@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { AthleteDTO, ResultDTO } from '../types';
+import type { AthleteDTO, ResultDTO } from '../types';
 
-const API_BASE_URL = 'http://localhost:8080';
+const API_BASE_URL = import.meta.env.APP_API_URL as string;
 
 const api = axios.create({
   baseURL: API_BASE_URL,
