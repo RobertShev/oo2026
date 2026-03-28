@@ -2,7 +2,18 @@
 <module type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/01_06.02-andmemudelid/HW/filmipood/.idea" />
+      <excludeFolder url="file://$MODULE_DIR$/01_06.02-andmemudelid/HW/filmipood/target" />
+      <excludeFolder url="file://$MODULE_DIR$/02_13.02-veateated/cars/.idea" />
+      <excludeFolder url="file://$MODULE_DIR$/02_13.02-veateated/cars/target" />
+      <excludeFolder url="file://$MODULE_DIR$/03_20.02-klassikomplekt/decathlon/.idea" />
+      <excludeFolder url="file://$MODULE_DIR$/03_20.02-klassikomplekt/decathlon/target" />
+      <excludeFolder url="file://$MODULE_DIR$/04_27.02-proovikontrolltoo1/rentalstore/.idea" />
+      <excludeFolder url="file://$MODULE_DIR$/04_27.02-proovikontrolltoo1/rentalstore/target" />
+      <excludeFolder url="file://$MODULE_DIR$/veebipood/.idea" />
+      <excludeFolder url="file://$MODULE_DIR$/veebipood/target" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
