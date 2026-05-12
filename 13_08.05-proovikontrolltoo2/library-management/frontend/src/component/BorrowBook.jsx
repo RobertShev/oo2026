@@ -20,22 +20,21 @@ function BorrowBook() {
           fetch(`${API_URL}/api/borrow`),
         ]);
 
-        const booksData = await booksRes.json();
+        let booksData = await booksRes.json();
         const membersData = await membersRes.json();
         let borrowData = await borrowRes.json();
 
-        // ✅ Ensure it's always an array
+        // /api/books returns Spring Page<Book>; unwrap to array
+        if (!Array.isArray(booksData)) {
+          booksData = booksData.content || [];
+        }
         if (!Array.isArray(borrowData)) {
           borrowData = borrowData.content || [];
         }
 
-        console.log("✅ Books loaded:", booksData);
-        console.log("✅ Members loaded:", membersData);
-        console.log("✅ Borrow records loaded:", borrowData);
-
-        setBooks(booksData || []);
+        setBooks(booksData);
         setMembers(membersData || []);
-        setBorrowRecords(borrowData || []);
+        setBorrowRecords(borrowData);
       } catch (error) {
         console.error("❌ Error loading data:", error);
         setBorrowRecords([]);
