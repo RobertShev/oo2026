@@ -9,7 +9,6 @@ import ee.robert.decathlon.repository.AthleteRepository;
 import ee.robert.decathlon.repository.ResultRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,17 +22,14 @@ public class DecathlonService {
     private final AthleteRepository athleteRepository;
     private final ResultRepository resultRepository;
 
-    public AthleteDTO addAthlete(AthleteDTO athleteDTO) {
+    public List<AthleteDTO> addAthlete(AthleteDTO athleteDTO) {
         Athlete athlete = new Athlete(athleteDTO.getName(), athleteDTO.getCountry());
-        Athlete savedAthlete = athleteRepository.save(athlete);
-        athleteDTO.setId(savedAthlete.getId());
-        athleteDTO.setTotalScore(0);
-        return athleteDTO;
+        athleteRepository.save(athlete);
+        return getAllAthletes();
     }
 
     @Transactional(readOnly = true)
-    public Page<AthleteDTO> getAthletes(int page, int size, String country, String scoreSort) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<AthleteDTO> getAthletes(Pageable pageable, String country, String scoreSort) {
         String filterCountry = (country == null || country.isBlank()) ? null : country;
 
         Page<Athlete> athletes;
@@ -50,15 +46,23 @@ public class DecathlonService {
         return athletes.map(this::toDTO);
     }
 
+    @Transactional(readOnly = true)
+    public List<AthleteDTO> getAllAthletes() {
+        return athleteRepository.findAll().stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
     public List<String> getCountries() {
         return athleteRepository.findDistinctCountries();
     }
 
-    public void deleteAthlete(Long id) {
+    public List<AthleteDTO> deleteAthlete(Long id) {
         if (!athleteRepository.existsById(id)) {
             throw new ResourceNotFoundException("Athlete not found with ID: " + id);
         }
         athleteRepository.deleteById(id);
+        return getAllAthletes();
     }
 
     public ResultDTO addResult(ResultDTO resultDTO) {

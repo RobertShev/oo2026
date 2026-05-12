@@ -4,6 +4,7 @@ import ee.robert.decathlon.dto.AthleteDTO;
 import ee.robert.decathlon.service.DecathlonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,18 +17,18 @@ public class AthleteController {
     private final DecathlonService decathlonService;
 
     @PostMapping
-    public AthleteDTO addAthlete(@RequestBody AthleteDTO athleteDTO) {
+    public List<AthleteDTO> addAthlete(@RequestBody AthleteDTO athleteDTO) {
         return decathlonService.addAthlete(athleteDTO);
     }
 
+    // localhost:8080/athletes?page=0&size=10&sort=name,asc&country=Estonia&scoreSort=desc
     @GetMapping
     public Page<AthleteDTO> getAthletes(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            Pageable pageable,
             @RequestParam(required = false) String country,
             @RequestParam(required = false) String scoreSort
     ) {
-        return decathlonService.getAthletes(page, size, country, scoreSort);
+        return decathlonService.getAthletes(pageable, country, scoreSort);
     }
 
     @GetMapping("/countries")
@@ -41,7 +42,7 @@ public class AthleteController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteAthlete(@PathVariable Long id) {
-        decathlonService.deleteAthlete(id);
+    public List<AthleteDTO> deleteAthlete(@PathVariable Long id) {
+        return decathlonService.deleteAthlete(id);
     }
 }

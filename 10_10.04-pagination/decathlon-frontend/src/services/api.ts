@@ -15,6 +15,7 @@ export interface AthletesQuery {
 }
 
 export const athleteService = {
+  // Spring Pageable expects ?page=&size=&sort=field,direction
   getPage: ({ page, size, country, scoreSort }: AthletesQuery) => {
     const params: Record<string, string | number> = { page, size };
     if (country) params.country = country;
@@ -22,8 +23,8 @@ export const athleteService = {
     return api.get<Page<AthleteDTO>>('/athletes', { params });
   },
   getCountries: () => api.get<string[]>('/athletes/countries'),
-  create: (athlete: AthleteDTO) => api.post<AthleteDTO>('/athletes', athlete),
-  delete: (id: number) => api.delete<void>(`/athletes/${id}`),
+  create: (athlete: AthleteDTO) => api.post<AthleteDTO[]>('/athletes', athlete),
+  delete: (id: number) => api.delete<AthleteDTO[]>(`/athletes/${id}`),
   getTotalScore: (id: number) => api.get<number>(`/athletes/${id}/total-score`),
 };
 
