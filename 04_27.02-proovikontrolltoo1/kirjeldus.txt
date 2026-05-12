@@ -1,1 +1,19 @@
 Esimese kontrolltööga sarnaneva kolme alapunktiga ülesande lahendus
+
+Uus Spring rakendus.
+
+Võimaldada filmidega:
+•	Add a film
+•	Remove a film
+•	Change the type of a film
+•	List all films
+•	List all films in store (e.g. not rented at the moment)
+
+
+Võimaldada filme rentida ja kokku arvutada palju läheb maksma
+
+
+Võimaldada filme tagasi tuua ja palju läheb late fee.
+
+
+Ei ole vaja teha: boonuspunktid. Unit teste.

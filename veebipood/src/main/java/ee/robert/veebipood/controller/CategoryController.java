@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 public class CategoryController {
 
@@ -19,7 +20,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("categories/{id}")
-    public List<Category> deleteCategory(@PathVariable Long id){
+        public List<Category> deleteCategory(@PathVariable Long id){
         categoryRepository.deleteById(id); // kustutan
         return categoryRepository.findAll(); // uuenenud seis
     }

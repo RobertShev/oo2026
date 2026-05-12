@@ -1,6 +1,5 @@
 package ee.robert.veebipood.entity;
 
-import ee.robert.veebipood.entity.Category;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

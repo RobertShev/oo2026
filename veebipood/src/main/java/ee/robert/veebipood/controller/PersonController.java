@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 public class PersonController {
 
@@ -33,9 +34,27 @@ public class PersonController {
     }
 
     @PostMapping("signup")
-    public Person signup(@RequestBody Person person){
+    public Person signup(@RequestBody Person person){ // TODO: PersonSignupDTO (kus pole aadressi ega ID-d)
+        // Kui on DTO, siis ei pea alumist kontrolli tegema
+        if (person.getId() != null) {
+            throw new RuntimeException("Cannot sign up with ID");
+        }
         personService.validate(person);
         return personRepository.save(person);
+    }
+
+    @PutMapping("profile")
+    public Person updateProfile(@RequestBody Person person){ // TODO: PersonUpdateDTO (kus pole parooli)
+        if (person.getId() == null) {
+            throw new RuntimeException("Cannot update without ID");
+        }
+        personService.validate(person);
+        return personRepository.save(person);
+    }
+
+    @GetMapping("profile")
+    public Person getProfile(@RequestParam Long id) {
+        return personRepository.findById(id).orElseThrow();
     }
 
     @PostMapping("login")

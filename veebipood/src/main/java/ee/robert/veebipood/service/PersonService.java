@@ -19,14 +19,16 @@ public class PersonService {
     }
 
     public void validate(Person person){
-        if (person.getId() != null) {
-            throw new RuntimeException("Cannot sign up with ID");
-        }
+        //if (person.getId() != null) {
+        //    throw new RuntimeException("Cannot sign up with ID");
+        //}
+        // need veateated ei tohiks minna tavakliendile
+        // need veateated on front-end keskkonnale, et tema tõlgiks ja väljastaks
         if (person.getEmail() == null) {
-            throw new RuntimeException("Cannot sign up without email");
+            throw new RuntimeException("Email missing");
         }
         if (person.getPersonalCode() == null) {
-            throw new RuntimeException("Cannot sign up without personal code");
+            throw new RuntimeException("Personal code missing");
         }
         if (!isValid(person.getEmail())) {
             throw new RuntimeException("Invalid email");

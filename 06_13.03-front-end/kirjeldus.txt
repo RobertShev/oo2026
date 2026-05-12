@@ -1,1 +1,1 @@
-Kümnevõistlusele lihtne front-end. Kõik back-endis tehtud peab olema kasutusel front-endis.
+Kümnevõistlusele lihtne front-end. Võimalik lisada ja kustutada sportlasi.

@@ -1,7 +1,6 @@
 package ee.robert.veebipood.entity;
 
-import ee.robert.veebipood.entity.OrderRow;
-import ee.robert.veebipood.entity.Person;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,7 +1,6 @@
 package ee.robert.veebipood.entity;
 
 //import javax.persistence.*
-import ee.robert.veebipood.entity.Address;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
