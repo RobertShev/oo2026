@@ -3,6 +3,7 @@ package ee.robert.decathlon.controller;
 import ee.robert.decathlon.dto.AthleteDTO;
 import ee.robert.decathlon.service.DecathlonService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +21,18 @@ public class AthleteController {
     }
 
     @GetMapping
-    public List<AthleteDTO> getAllAthletes() {
-        return decathlonService.getAllAthletes();
+    public Page<AthleteDTO> getAthletes(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String country,
+            @RequestParam(required = false) String scoreSort
+    ) {
+        return decathlonService.getAthletes(page, size, country, scoreSort);
+    }
+
+    @GetMapping("/countries")
+    public List<String> getCountries() {
+        return decathlonService.getCountries();
     }
 
     @GetMapping("/{id}/total-score")

@@ -3,7 +3,7 @@ import { AthletesList } from './components/AthletesList';
 import { AddResultForm } from './components/AddResultForm';
 
 function App() {
-  const { athletes, selectedAthlete, totalScore, addAthlete, deleteAthlete, addResult, selectAthlete, isLoading, error, clearError } = useDecathlon();
+  const { selectedAthlete, totalScore, totalElements, addResult, selectAthlete, isLoading, error, clearError } = useDecathlon();
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-blue-100 p-4 md:p-8">
@@ -15,7 +15,7 @@ function App() {
             <div className="bg-white px-4 py-1.5 rounded-full border border-gray-100 shadow-sm flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
               <span className="text-sm font-medium text-gray-700">
-                {athletes.length} {athletes.length === 1 ? 'Athlete' : 'Athletes'}
+                {totalElements} {totalElements === 1 ? 'Athlete' : 'Athletes'}
               </span>
             </div>
           </div>
@@ -37,14 +37,7 @@ function App() {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-          <AthletesList
-            athletes={athletes}
-            selectedAthlete={selectedAthlete}
-            isLoading={isLoading}
-            onAddAthlete={addAthlete}
-            onDeleteAthlete={deleteAthlete}
-            onSelectAthlete={selectAthlete}
-          />
+          <AthletesList />
           <AddResultForm
             selectedAthlete={selectedAthlete}
             totalScore={totalScore}

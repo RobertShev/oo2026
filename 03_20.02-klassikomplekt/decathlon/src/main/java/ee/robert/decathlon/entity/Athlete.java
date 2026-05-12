@@ -18,10 +18,17 @@ public class Athlete {
 
     private String name;
 
+    private String country;
+
     @OneToMany(mappedBy = "athlete", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Result> results = new ArrayList<>();
 
     public Athlete(String name) {
         this.name = name;
+    }
+
+    public Athlete(String name, String country) {
+        this.name = name;
+        this.country = country;
     }
 }

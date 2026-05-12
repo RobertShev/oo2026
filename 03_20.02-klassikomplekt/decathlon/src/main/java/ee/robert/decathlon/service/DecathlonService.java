@@ -8,10 +8,13 @@ import ee.robert.decathlon.exception.ResourceNotFoundException;
 import ee.robert.decathlon.repository.AthleteRepository;
 import ee.robert.decathlon.repository.ResultRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,21 +24,34 @@ public class DecathlonService {
     private final ResultRepository resultRepository;
 
     public AthleteDTO addAthlete(AthleteDTO athleteDTO) {
-        Athlete athlete = new Athlete(athleteDTO.getName());
+        Athlete athlete = new Athlete(athleteDTO.getName(), athleteDTO.getCountry());
         Athlete savedAthlete = athleteRepository.save(athlete);
         athleteDTO.setId(savedAthlete.getId());
+        athleteDTO.setTotalScore(0);
         return athleteDTO;
     }
 
-    public List<AthleteDTO> getAllAthletes() {
-        return athleteRepository.findAll().stream()
-                .map(a -> {
-                    AthleteDTO dto = new AthleteDTO();
-                    dto.setId(a.getId());
-                    dto.setName(a.getName());
-                    return dto;
-                })
-                .collect(Collectors.toList());
+    @Transactional(readOnly = true)
+    public Page<AthleteDTO> getAthletes(int page, int size, String country, String scoreSort) {
+        Pageable pageable = PageRequest.of(page, size);
+        String filterCountry = (country == null || country.isBlank()) ? null : country;
+
+        Page<Athlete> athletes;
+        if ("desc".equalsIgnoreCase(scoreSort)) {
+            athletes = athleteRepository.findAllSortedByScoreDesc(filterCountry, pageable);
+        } else if ("asc".equalsIgnoreCase(scoreSort)) {
+            athletes = athleteRepository.findAllSortedByScoreAsc(filterCountry, pageable);
+        } else if (filterCountry != null) {
+            athletes = athleteRepository.findAllByCountry(filterCountry, pageable);
+        } else {
+            athletes = athleteRepository.findAll(pageable);
+        }
+
+        return athletes.map(this::toDTO);
+    }
+
+    public List<String> getCountries() {
+        return athleteRepository.findDistinctCountries();
     }
 
     public void deleteAthlete(Long id) {
@@ -58,7 +74,7 @@ public class DecathlonService {
         return resultDTO;
     }
 
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional(readOnly = true)
     public Integer getTotalScore(Long athleteId) {
         Athlete athlete = athleteRepository.findById(athleteId)
                 .orElseThrow(() -> new ResourceNotFoundException("Athlete not found with ID: " + athleteId));
@@ -68,21 +84,27 @@ public class DecathlonService {
                 .sum();
     }
 
+    private AthleteDTO toDTO(Athlete athlete) {
+        AthleteDTO dto = new AthleteDTO();
+        dto.setId(athlete.getId());
+        dto.setName(athlete.getName());
+        dto.setCountry(athlete.getCountry());
+        dto.setTotalScore(athlete.getResults().stream().mapToInt(Result::getPoints).sum());
+        return dto;
+    }
+
     private int calculatePoints(String discipline, Double value) {
         if (discipline == null) {
             throw new IllegalArgumentException("Discipline cannot be null");
         }
-        
+
         String normalizedDiscipline = discipline.toLowerCase().trim();
-        
+
         switch (normalizedDiscipline) {
             case "100m":
-                // 100 metres: 25.4347 * (18 - T)^1.81
                 if (value > 18) return 0;
                 return (int) (25.4347 * Math.pow(18 - value, 1.81));
             case "long jump":
-                // Long jump: 0.14354 * (D - 220)^1.4
-                // value is usually in meters, formula expects centimeters
                 double distanceCm = value * 100;
                 if (distanceCm < 220) return 0;
                 return (int) (0.14354 * Math.pow(distanceCm - 220, 1.4));
