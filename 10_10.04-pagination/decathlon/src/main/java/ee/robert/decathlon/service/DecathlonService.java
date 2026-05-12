@@ -22,10 +22,10 @@ public class DecathlonService {
     private final AthleteRepository athleteRepository;
     private final ResultRepository resultRepository;
 
-    public List<AthleteDTO> addAthlete(AthleteDTO athleteDTO) {
+    public AthleteDTO addAthlete(AthleteDTO athleteDTO) {
         Athlete athlete = new Athlete(athleteDTO.getName(), athleteDTO.getCountry());
-        athleteRepository.save(athlete);
-        return getAllAthletes();
+        Athlete savedAthlete = athleteRepository.save(athlete);
+        return toDTO(savedAthlete);
     }
 
     @Transactional(readOnly = true)
@@ -57,12 +57,11 @@ public class DecathlonService {
         return athleteRepository.findDistinctCountries();
     }
 
-    public List<AthleteDTO> deleteAthlete(Long id) {
+    public void deleteAthlete(Long id) {
         if (!athleteRepository.existsById(id)) {
             throw new ResourceNotFoundException("Athlete not found with ID: " + id);
         }
         athleteRepository.deleteById(id);
-        return getAllAthletes();
     }
 
     public ResultDTO addResult(ResultDTO resultDTO) {

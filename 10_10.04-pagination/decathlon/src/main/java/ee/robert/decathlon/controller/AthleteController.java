@@ -18,7 +18,8 @@ public class AthleteController {
 
     @PostMapping
     public List<AthleteDTO> addAthlete(@RequestBody AthleteDTO athleteDTO) {
-        return decathlonService.addAthlete(athleteDTO);
+        decathlonService.addAthlete(athleteDTO);
+        return decathlonService.getAllAthletes();
     }
 
     // localhost:8080/athletes?page=0&size=10&sort=name,asc&country=Estonia&scoreSort=desc
@@ -43,6 +44,7 @@ public class AthleteController {
 
     @DeleteMapping("/{id}")
     public List<AthleteDTO> deleteAthlete(@PathVariable Long id) {
-        return decathlonService.deleteAthlete(id);
+        decathlonService.deleteAthlete(id);
+        return decathlonService.getAllAthletes();
     }
 }
