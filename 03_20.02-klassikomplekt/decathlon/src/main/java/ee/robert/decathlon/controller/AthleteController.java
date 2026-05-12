@@ -28,4 +28,9 @@ public class AthleteController {
     public Integer getTotalScore(@PathVariable Long id) {
         return decathlonService.getTotalScore(id);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteAthlete(@PathVariable Long id) {
+        decathlonService.deleteAthlete(id);
+    }
 }

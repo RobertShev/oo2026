@@ -31,13 +31,31 @@ export function DecathlonProvider({ children }: { children: React.ReactNode }) {
     setError(null);
     try {
       await athleteService.create({ name });
-      await fetchAthletes();
+      const response = await athleteService.getAll();
+      setAthletes(response.data);
     } catch (err) {
       console.error('Error adding athlete:', err);
       setError('Failed to add athlete. Please check your connection.');
+    } finally {
       setIsLoading(false);
     }
-  }, [fetchAthletes]);
+  }, []);
+
+  const deleteAthlete = useCallback(async (id: number) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      await athleteService.delete(id);
+      setAthletes(prev => prev.filter(a => a.id !== id));
+      setSelectedAthlete(prev => (prev?.id === id ? null : prev));
+      setTotalScore(prev => (selectedAthlete?.id === id ? null : prev));
+    } catch (err) {
+      console.error('Error deleting athlete:', err);
+      setError('Failed to delete athlete. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [selectedAthlete]);
 
   const selectAthlete = useCallback(async (athlete: AthleteDTO | null) => {
     if (athlete === null || athlete.id === undefined) {
@@ -66,13 +84,18 @@ export function DecathlonProvider({ children }: { children: React.ReactNode }) {
     try {
       await resultService.create(result);
       const athlete = athletes.find(a => a.id === result.athleteId);
-      await selectAthlete(athlete || null);
+      if (athlete) {
+        const response = await athleteService.getTotalScore(athlete.id!);
+        setTotalScore(response.data);
+        setSelectedAthlete(athlete);
+      }
     } catch (err) {
       console.error('Error adding result:', err);
       setError('Failed to add result. Please verify the input.');
+    } finally {
       setIsLoading(false);
     }
-  }, [selectAthlete, athletes]);
+  }, [athletes]);
 
   useEffect(() => {
     fetchAthletes();
@@ -88,6 +111,7 @@ export function DecathlonProvider({ children }: { children: React.ReactNode }) {
       clearError,
       fetchAthletes,
       addAthlete,
+      deleteAthlete,
       addResult,
       selectAthlete
     }}>
@@ -95,4 +119,3 @@ export function DecathlonProvider({ children }: { children: React.ReactNode }) {
     </DecathlonContext.Provider>
   );
 }
-

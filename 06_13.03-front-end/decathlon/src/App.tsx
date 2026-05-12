@@ -3,7 +3,7 @@ import { AthletesList } from './components/AthletesList';
 import { AddResultForm } from './components/AddResultForm';
 
 function App() {
-  const { athletes, selectedAthlete, totalScore, addAthlete, addResult, selectAthlete, isLoading, error, clearError } = useDecathlon();
+  const { athletes, selectedAthlete, totalScore, addAthlete, deleteAthlete, addResult, selectAthlete, isLoading, error, clearError } = useDecathlon();
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-blue-100 p-4 md:p-8">
@@ -42,6 +42,7 @@ function App() {
             selectedAthlete={selectedAthlete}
             isLoading={isLoading}
             onAddAthlete={addAthlete}
+            onDeleteAthlete={deleteAthlete}
             onSelectAthlete={selectAthlete}
           />
           <AddResultForm

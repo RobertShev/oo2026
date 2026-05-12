@@ -38,6 +38,13 @@ public class DecathlonService {
                 .collect(Collectors.toList());
     }
 
+    public void deleteAthlete(Long id) {
+        if (!athleteRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Athlete not found with ID: " + id);
+        }
+        athleteRepository.deleteById(id);
+    }
+
     public ResultDTO addResult(ResultDTO resultDTO) {
         Athlete athlete = athleteRepository.findById(resultDTO.getAthleteId())
                 .orElseThrow(() -> new ResourceNotFoundException("Athlete not found with ID: " + resultDTO.getAthleteId()));
