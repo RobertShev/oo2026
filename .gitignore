@@ -10,6 +10,7 @@ dist/
 dist-ssr/
 build/
 target/
+.vite/
 
 # Decathlon specific
 06_13.03-front-end/decathlon/node_modules/
