@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { API_URL } from "../config";
 
 function SearchBook() {
   const [query, setQuery] = useState("");
@@ -23,7 +24,7 @@ function SearchBook() {
     setHasSearched(true); // ✅ Mark that user performed a search
 
     try {
-      const res = await fetch(`http://localhost:8081/api/books/search?q=${query}`);
+      const res = await fetch(`${API_URL}/api/books/search?q=${query}`);
       console.log("📡 API response status:", res.status);
 
       if (!res.ok) {
