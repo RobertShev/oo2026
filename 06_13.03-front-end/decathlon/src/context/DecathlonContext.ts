@@ -10,6 +10,7 @@ export interface DecathlonContextValue {
   clearError: () => void;
   fetchAthletes: () => Promise<void>;
   addAthlete: (name: string) => Promise<void>;
+  deleteAthlete: (id: number) => Promise<void>;
   addResult: (result: ResultDTO) => Promise<void>;
   selectAthlete: (athlete: AthleteDTO | null) => Promise<void>;
 }
