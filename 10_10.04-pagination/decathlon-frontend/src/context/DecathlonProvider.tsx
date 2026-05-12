@@ -142,9 +142,6 @@ export function DecathlonProvider({ children }: { children: React.ReactNode }) {
     fetchCountries();
   }, [fetchCountries]);
 
-  // If the currently selected country disappears from the list (e.g. after
-  // deleting the last athlete from that country), reset the filter so the
-  // dropdown's visible value matches state and refetches kick in.
   useEffect(() => {
     if (countryFilter && !countries.includes(countryFilter)) {
       setCountryFilterState(null);

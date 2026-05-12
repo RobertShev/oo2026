@@ -15,7 +15,6 @@ export interface AthletesQuery {
 }
 
 export const athleteService = {
-  // Spring Pageable expects ?page=&size=&sort=field,direction
   getPage: ({ page, size, country, scoreSort }: AthletesQuery) => {
     const params: Record<string, string | number> = { page, size };
     if (country) params.country = country;

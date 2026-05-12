@@ -22,7 +22,6 @@ public class AthleteController {
         return decathlonService.getAllAthletes();
     }
 
-    // localhost:8080/athletes?page=0&size=10&sort=name,asc&country=Estonia&scoreSort=desc
     @GetMapping
     public Page<AthleteDTO> getAthletes(
             Pageable pageable,
