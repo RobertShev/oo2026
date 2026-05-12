@@ -5,12 +5,8 @@ import ee.robert.rentalstore.entity.Film;
 import ee.robert.rentalstore.entity.FilmType;
 import ee.robert.rentalstore.repository.FilmRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -49,14 +45,6 @@ public class FilmController {
 
     @GetMapping("films/available")
     public List<Film> findAllAvailable(){
-//        List<Film> films = findAll();
-//        List<Film> availableFilms = new ArrayList<>();
-//        for(Film film : films){
-//            if (film.getDays() == 0) {
-//                availableFilms.add(film);
-//            }
-//        }
-//        return availableFilms;
         return filmRepository.findByDays(0);
     }
 }
