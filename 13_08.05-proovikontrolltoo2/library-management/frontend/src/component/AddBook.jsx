@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { API_URL } from "../config";
 
 function AddBook() {
   const [bookTitle, setBookTitle] = useState("");
@@ -19,9 +20,9 @@ function AddBook() {
   async function fetchDropdowns() {
     try {
       const [authorsRes, publishersRes, categoriesRes] = await Promise.all([
-        fetch("http://localhost:8081/api/authors"),
-        fetch("http://localhost:8081/api/publishers"),
-        fetch("http://localhost:8081/api/categories"),
+        fetch(`${API_URL}/api/authors`),
+        fetch(`${API_URL}/api/publishers`),
+        fetch(`${API_URL}/api/categories`),
       ]);
 
       // Parse JSON properly
@@ -61,7 +62,7 @@ function AddBook() {
     if (imageFile) formData.append("image", imageFile);
 
     try {
-      const response = await fetch("http://localhost:8081/api/books", {
+      const response = await fetch(`${API_URL}/api/books`, {
         method: "POST",
         body: formData, // Send as multipart/form-data
       });

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { API_URL } from "../config";
 
 function BorrowBook() {
   const [books, setBooks] = useState([]);
@@ -14,9 +15,9 @@ function BorrowBook() {
         console.log("🔄 Loading books, members, and borrow records...");
 
         const [booksRes, membersRes, borrowRes] = await Promise.all([
-          fetch("http://localhost:8081/api/books"),
-          fetch("http://localhost:8081/api/members"),
-          fetch("http://localhost:8081/api/borrow"),
+          fetch(`${API_URL}/api/books`),
+          fetch(`${API_URL}/api/members`),
+          fetch(`${API_URL}/api/borrow`),
         ]);
 
         const booksData = await booksRes.json();
@@ -55,7 +56,7 @@ function BorrowBook() {
     console.log("📤 Sending borrow record to backend:", record);
 
     try {
-      const response = await fetch("http://localhost:8081/api/borrow", {
+      const response = await fetch(`${API_URL}/api/borrow`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(record),
@@ -85,7 +86,7 @@ function BorrowBook() {
     console.log(`🔁 Sending return request for record ID: ${id}`);
 
     try {
-      const response = await fetch(`http://localhost:8081/api/borrow/${id}/return`, {
+      const response = await fetch(`${API_URL}/api/borrow/${id}/return`, {
         method: "PUT",
       });
 

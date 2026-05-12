@@ -1,6 +1,7 @@
 // rfce
 
 import { useEffect, useState } from "react"
+import { API_URL } from "../config"
 
 function Bibles() {
     const [books, setBooks] = useState([]);
@@ -8,7 +9,7 @@ function Bibles() {
     useEffect(() => {
         async function fetchBibles() {
             try {
-                const data = await fetch("http://localhost:8081/api/bibles");
+                const data = await fetch(`${API_URL}/api/bibles`);
                 const fetchData = await data.json();
                 setBooks(fetchData.slice());
             } catch (e) {

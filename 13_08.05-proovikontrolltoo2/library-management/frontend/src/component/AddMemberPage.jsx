@@ -1,5 +1,6 @@
     import React, { useState } from "react";
     import "bootstrap/dist/css/bootstrap.min.css";
+    import { API_URL } from "../config";
 
     function AddMemberPage() {
     const [name, setName] = useState("");
@@ -23,7 +24,7 @@
 };
 
         try {
-        const res = await fetch("http://localhost:8081/api/members", {
+        const res = await fetch(`${API_URL}/api/members`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(newMember),
