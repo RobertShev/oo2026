@@ -22,6 +22,10 @@ target/
 *.swp
 *.swo
 
+# AI tooling
+.claude/
+.ai/
+
 # Environment files
 .env
 .env.local
