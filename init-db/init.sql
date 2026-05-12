@@ -1,1 +1,3 @@
 CREATE DATABASE veebipood;
+CREATE DATABASE decathlon;
+CREATE DATABASE library;
