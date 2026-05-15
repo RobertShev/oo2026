@@ -29,8 +29,17 @@ async function request(path, { method = 'GET', body, headers } = {}) {
   return contentType.includes('application/json') ? response.json() : response.text()
 }
 
+function buildQuery(params) {
+  const entries = Object.entries(params).filter(([, value]) => value !== null && value !== undefined && value !== '')
+  if (entries.length === 0) return ''
+  const search = new URLSearchParams()
+  for (const [key, value] of entries) search.set(key, value)
+  return `?${search.toString()}`
+}
+
 export const productService = {
-  getAll: () => request('/products'),
+  getPage: ({ page = 0, size = 2, sort } = {}) => request(`/products${buildQuery({ page, size, sort })}`),
+  getAll: () => request('/products/all'),
   getById: (id) => request(`/products/${id}`),
   create: (product) => request('/products', { method: 'POST', body: product }),
   update: (product) => request('/products', { method: 'PUT', body: product }),
@@ -42,4 +51,8 @@ export const categoryService = {
   create: (category) => request('/categories', { method: 'POST', body: category }),
   update: (category) => request('/categories', { method: 'PUT', body: category }),
   delete: (id) => request(`/categories/${id}`, { method: 'DELETE' }),
+}
+
+export const postService = {
+  getAll: () => request('/posts'),
 }
