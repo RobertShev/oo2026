@@ -5,4 +5,28 @@ Teise kontrolltöö tulemus on eksamihinde aluseks:
 2 punkti - B
 3 punkti - A
 
-Muude kursusel esitavate tööde abil saab hinnet mõlemas suunas mõjutada. 
+Muude kursusel esitavate tööde abil saab hinnet mõlemas suunas mõjutada.
+
+
+
+VARIANT 1
+
+1.a Pane projekt käima
+
+- backendis application.properties seaded
+- frontendis node_modules kausta tekitamine "npm install" abil
+
+
+1.b - Asenda ära mockapi.io poole pöördumine front-endis, back-endi poole pöördumisega
+
+
+2.a - Lisa uus toode backendi. Jälgi, et see tuleks PgAdminis andmebaasi. Lisa backendi kontroll: toote nimi ei tohi olla tühi.
+
+
+2.b - Tekita erinevad keskkonnad nii frontendis (env failid) kui backendis (application-dev ja application-prod)
+
+
+3.a - Võimalda tooteid lehekülgede kaupa näha back-end kaudu otse andmebaasist. Võimalda sorteerida back-end kaudu otse andmebaasist.
+
+
+3.b - Kasuta ära "Shops" lehte, mis on tühi. Võta sinna API endpoindist infot: "https://jsonplaceholder.typicode.com/posts". Pane tähele, et info peab tulema mitte otse front-end koodist, vaid läbi back-end koodi.
