@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:8080'
+const API_BASE_URL = import.meta.env.VITE_APP_API_URL
 
 async function request(path, { method = 'GET', body, headers } = {}) {
   const response = await fetch(`${API_BASE_URL}${path}`, {
@@ -12,7 +12,16 @@ async function request(path, { method = 'GET', body, headers } = {}) {
 
   if (!response.ok) {
     const text = await response.text().catch(() => '')
-    throw new Error(text || `${method} ${path} failed with ${response.status}`)
+    let message = `${method} ${path} failed with ${response.status}`
+    if (text) {
+      try {
+        const json = JSON.parse(text)
+        message = json.message || text
+      } catch {
+        message = text
+      }
+    }
+    throw new Error(message)
   }
 
   if (response.status === 204) return null

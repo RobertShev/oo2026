@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select"
 import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
-import { Check } from "lucide-react"
+import { Check, TriangleAlert } from "lucide-react"
 import { useStore } from "@/context/StoreContext"
 
 const INITIAL_PRODUCT = {
@@ -114,10 +114,16 @@ function AddProduct() {
         <Button
           type="button"
           onClick={async () => {
-            await submitProduct()
-            toast("Product has been added to the cart.", {
-              icon: <Check className="h-4 w-4" />,
-            })
+            try {
+              await submitProduct()
+              toast("Product has been added.", {
+                icon: <Check className="h-4 w-4" />,
+              })
+            } catch (err) {
+              toast(err.message || "Failed to add product.", {
+                icon: <TriangleAlert className="h-4 w-4" />,
+              })
+            }
           }}
         >
           Add Product
