@@ -1,12 +1,18 @@
 import { useCallback, useEffect, useState } from 'react'
-import { productService, categoryService } from '../services/api'
+import { productService, categoryService, postService } from '../services/api'
 import { StoreContext } from './StoreContext'
 
 export function StoreProvider({ children }) {
   const [products, setProducts] = useState([])
+  const [productsPage, setProductsPage] = useState({ content: [], totalPages: 0, totalElements: 0 })
   const [categories, setCategories] = useState([])
+  const [posts, setPosts] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+
+  const [page, setPageState] = useState(0)
+  const [pageSize, setPageSizeState] = useState(2)
+  const [sort, setSortState] = useState(null)
 
   const clearError = useCallback(() => setError(null), [])
 
@@ -24,8 +30,25 @@ export function StoreProvider({ children }) {
     }
   }, [])
 
-  const fetchCategories = useCallback(async () => {
+  const fetchProductsPage = useCallback(async () => {
     setIsLoading(true)
+    setError(null)
+    try {
+      const data = await productService.getPage({ page, size: pageSize, sort })
+      setProductsPage({
+        content: data.content || [],
+        totalPages: data.totalPages || 0,
+        totalElements: data.totalElements || 0,
+      })
+    } catch (err) {
+      console.error('Error fetching products page:', err)
+      setError('Failed to load products.')
+    } finally {
+      setIsLoading(false)
+    }
+  }, [page, pageSize, sort])
+
+  const fetchCategories = useCallback(async () => {
     setError(null)
     try {
       const data = await categoryService.getAll()
@@ -33,6 +56,18 @@ export function StoreProvider({ children }) {
     } catch (err) {
       console.error('Error fetching categories:', err)
       setError('Failed to load categories.')
+    }
+  }, [])
+
+  const fetchPosts = useCallback(async () => {
+    setIsLoading(true)
+    setError(null)
+    try {
+      const data = await postService.getAll()
+      setPosts(data)
+    } catch (err) {
+      console.error('Error fetching posts:', err)
+      setError('Failed to load posts.')
     } finally {
       setIsLoading(false)
     }
@@ -52,26 +87,26 @@ export function StoreProvider({ children }) {
     setError(null)
     try {
       await productService.create(product)
-      await fetchProducts()
+      await Promise.all([fetchProducts(), fetchProductsPage()])
     } catch (err) {
       console.error('Error adding product:', err)
-      setError('Failed to add product.')
+      setError(err.message || 'Failed to add product.')
       throw err
     } finally {
       setIsLoading(false)
     }
-  }, [fetchProducts])
+  }, [fetchProducts, fetchProductsPage])
 
   const deleteProduct = useCallback(async (id) => {
     setError(null)
     try {
       await productService.delete(id)
-      await fetchProducts()
+      await Promise.all([fetchProducts(), fetchProductsPage()])
     } catch (err) {
       console.error('Error deleting product:', err)
       setError('Failed to delete product.')
     }
-  }, [fetchProducts])
+  }, [fetchProducts, fetchProductsPage])
 
   const deleteCategory = useCallback(async (id) => {
     setError(null)
@@ -84,24 +119,50 @@ export function StoreProvider({ children }) {
     }
   }, [fetchCategories])
 
+  const setPage = useCallback((nextPage) => setPageState(nextPage), [])
+
+  const setPageSize = useCallback((size) => {
+    setPageSizeState(size)
+    setPageState(0)
+  }, [])
+
+  const setSort = useCallback((nextSort) => {
+    setSortState(nextSort)
+    setPageState(0)
+  }, [])
+
   useEffect(() => {
     fetchProducts()
     fetchCategories()
   }, [fetchProducts, fetchCategories])
 
+  useEffect(() => {
+    fetchProductsPage()
+  }, [fetchProductsPage])
+
   return (
     <StoreContext.Provider value={{
       products,
+      productsPage,
       categories,
+      posts,
       isLoading,
       error,
+      page,
+      pageSize,
+      sort,
       clearError,
       fetchProducts,
+      fetchProductsPage,
       fetchCategories,
+      fetchPosts,
       fetchProduct,
       addProduct,
       deleteProduct,
       deleteCategory,
+      setPage,
+      setPageSize,
+      setSort,
     }}>
       {children}
     </StoreContext.Provider>
